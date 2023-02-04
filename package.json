@@ -1,24 +1,8 @@
 {
-  "name": "medical_records_management",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FireEagle97/medical_records_Management.git"
-  },
-  "keywords": [],
-  "author": "Dany Makhoul, shravan Devraj",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/FireEagle97/medical_records_Management/issues"
-  },
-  "homepage": "https://github.com/FireEagle97/medical_records_Management#readme",
   "dependencies": {
     "@hashgraph/sdk": "^2.19.2",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
   }
 }
