@@ -5,8 +5,13 @@ const {
   TopicCreateTransaction,
   TopicMessageQuery,
   TopicMessageSubmitTransaction,
+  Key,
 } = require("@hashgraph/sdk");
 require("dotenv").config({ path: `../.env` });
+
+const CryptoJS = require("crypto-js");
+
+const cryptoKey = "qwert";
 
 const myAccountId = process.env.MY_ACCOUNT_ID;
 const myPrivateKey = process.env.MY_PRIVATE_KEY;
@@ -70,9 +75,13 @@ async function subscribe(topicId) {
 //get specific message
 async function publish(topicId, message) {
   // Send one message
+  let encrypted = CryptoJS.AES.encrypt(JSON.stringify(message), cryptoKey);
+  encrypted = encrypted.toString();
+  console.log(encrypted);
+
   let sendResponse = await new TopicMessageSubmitTransaction({
     topicId: topicId,
-    message: message,
+    message: encrypted,
   }).execute(hederaClient);
   const getReceipt = await sendResponse.getReceipt(hederaClient);
 
@@ -84,16 +93,15 @@ async function publish(topicId, message) {
 //add messages
 //get all messages
 
-subscribe("0.0.6527");
-// publish("0.0.3381880", "testing sending message");
+message = {
+  senderName: "John Smith",
+  receiverName: "Joe Blow",
+  message: "You don't look so good.",
+};
+
+//subscribe("0.0.3381880");
+publish("0.0.3381880", message);
 
 //publish(subscribe(createTopic()), "hello again");
 
 module.exports = { createTopic, subscribe, publish };
-
-
-message = {
-  senderName: John Smith,
-  receiverName: Joe Blow,
-  message: "You don't look so good."
-}
