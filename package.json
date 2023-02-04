@@ -19,6 +19,7 @@
   "homepage": "https://github.com/FireEagle97/medical_records_Management#readme",
   "dependencies": {
     "@hashgraph/sdk": "^2.19.2",
+    "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3"
   }
 }

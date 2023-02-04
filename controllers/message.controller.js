@@ -31,47 +31,41 @@ async function createTopic() {
 }
 async function subscribe(topicId) {
   //Create the query
-  const messagesArr = []
+  const messagesArr = [];
   try {
     new TopicMessageQuery()
       .setTopicId(topicId)
       .setStartTime(0)
-      .subscribe(
-        hederaClient,
-        (message) => {
-          // const mirrorMessage = new TextDecoder("utf-8").decode(message.contents);
-          // const messageJson = JSON.parse(mirrorMessage);
-          // console.log(messageJson)
-          
-          // const runningHash = UInt8ToString(message["runningHash"]);
-          // const timestamp = secondsToDate(message["consensusTimestamp"]);
+      .subscribe(hederaClient, (message) => {
+        // const mirrorMessage = new TextDecoder("utf-8").decode(message.contents);
+        // const messageJson = JSON.parse(mirrorMessage);
+        // console.log(messageJson)
 
-          // const messageToUI = {
-          //     operatorAccount: myAccountId ,
-          //     client: hederaClient,
-          //     message: messageJson,
-          //     sequence: message.sequenceNumber.toString(10), // sequence number is a big integer
-          //     runningHash: runningHash,
-          //     timestamp: timestamp
-          // }
-          // console.log("message ToUO"+messageToUI)
-          let messageAsString = Buffer.from(
-            message.contents,
-            "utf8"
-          ).toString();
-          console.log(
-            `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
-          );
-          // console.log("contents " +message.contents)
-        }
-      );
+        // const runningHash = UInt8ToString(message["runningHash"]);
+        // const timestamp = secondsToDate(message["consensusTimestamp"]);
+
+        // const messageToUI = {
+        //     operatorAccount: myAccountId ,
+        //     client: hederaClient,
+        //     message: messageJson,
+        //     sequence: message.sequenceNumber.toString(10), // sequence number is a big integer
+        //     runningHash: runningHash,
+        //     timestamp: timestamp
+        // }
+        // console.log("message ToUO"+messageToUI)
+        let messageAsString = Buffer.from(message.contents, "utf8").toString();
+        console.log(
+          `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
+        );
+        // console.log("contents " +message.contents)
+      });
     console.log("you win");
   } catch (error) {
     console.log("ERROR: MirrorConsensusTopicQuery()", error);
     process.exit(1);
   }
 
-   return messagesArr
+  return messagesArr;
 }
 //get specific message
 async function publish(topicId, message) {
@@ -90,9 +84,16 @@ async function publish(topicId, message) {
 //add messages
 //get all messages
 
-subscribe("0.0.3381880");
+subscribe("0.0.6527");
 // publish("0.0.3381880", "testing sending message");
 
 //publish(subscribe(createTopic()), "hello again");
 
 module.exports = { createTopic, subscribe, publish };
+
+
+message = {
+  senderName: John Smith,
+  receiverName: Joe Blow,
+  message: "You don't look so good."
+}
