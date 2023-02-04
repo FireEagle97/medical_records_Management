@@ -34,7 +34,8 @@ async function main() {
   // The Hedera JS SDK makes this really easy!
   const client = Client.forTestnet();
   client.setOperator(myAccountId, myPrivateKey);
-
+  //connect
+  //create new topic return topic id
   //Create a new topic
   /*   let txResponse = await new TopicCreateTransaction().execute(client);
 
