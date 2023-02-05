@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getMessages,
   addMessage,
+  addNewMessage,
 } = require("../controllers/message.controller.js");
 
 const router = express.Router();
@@ -10,6 +11,6 @@ const router = express.Router();
 router.get("/", getMessages);
 
 // POST a message
-router.post("/", addMessage);
+router.post("/", addNewMessage);
 
 module.exports = router;

@@ -84,7 +84,9 @@ async function publish(topicId, message) {
 }
 
 //add messages
-function addMessage(req, res) {
+function addNewMessage(req, res) {
+  const { message } = req.body;
+
   res.status(200).json({ post: "post" });
 }
 //get all messages
@@ -101,6 +103,12 @@ message = {
 // console.log(topicId);
 
 subscribe("0.0.3382026");
-publish("0.0.3382026", message);
+//publish("0.0.3382026", message);
 
-module.exports = { createTopic, subscribe, publish, addMessage, getMessages };
+module.exports = {
+  createTopic,
+  subscribe,
+  publish,
+  addNewMessage,
+  getMessages,
+};
