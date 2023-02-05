@@ -58,7 +58,16 @@ async function subscribe(topicId) {
         //     timestamp: timestamp
         // }
         // console.log("message ToUO"+messageToUI)
-        let messageAsString = Buffer.from(message.contents, "utf8").toString();
+
+        let messageAsString = Buffer.from(message.contents);
+        const json = JSON.stringify(messageAsString);
+
+        const copy = JSON.parse(json, (key, value) => {
+          return value && value.type === "Buffer" ? Buffer.from(value) : value;
+        });
+
+        console.log("======> " + copy);
+
         console.log(
           `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
         );
@@ -99,8 +108,8 @@ message = {
   message: "You don't look so good.",
 };
 
-//subscribe("0.0.3381880");
-publish("0.0.3381880", message);
+subscribe("0.0.3381880");
+//publish("0.0.3381880", message);
 
 //publish(subscribe(createTopic()), "hello again");
 
