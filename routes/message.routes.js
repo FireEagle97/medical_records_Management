@@ -1,7 +1,6 @@
 const express = require("express");
 const {
   getMessages,
-  addMessage,
   addNewMessage,
 } = require("../controllers/message.controller.js");
 
