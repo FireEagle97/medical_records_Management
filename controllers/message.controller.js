@@ -5,8 +5,14 @@ const {
   TopicCreateTransaction,
   TopicMessageQuery,
   TopicMessageSubmitTransaction,
+  Key,
 } = require("@hashgraph/sdk");
 require("dotenv").config({ path: `../.env` });
+
+const CryptoJS = require("crypto-js");
+const { text } = require("express");
+
+const cryptoKey = "qwert";
 
 const myAccountId = process.env.MY_ACCOUNT_ID;
 const myPrivateKey = process.env.MY_PRIVATE_KEY;
@@ -21,7 +27,6 @@ async function createTopic() {
     console.log("TopicCreateTransaction()", `submitted tx`);
     const receipt = await response.getReceipt(hederaClient);
     const newTopicId = receipt.topicId;
-    // subscribe(newTopicId);
     console.log("TopicCreateTransaction()", `success! new topic ${newTopicId}`);
     return newTopicId;
   } catch (error) {
@@ -29,40 +34,51 @@ async function createTopic() {
     process.exit(1);
   }
 }
+
+let returnedMessageFromHedera = "";
+
+function returnMessages(message) {
+  let messageAsString = Buffer.from(message.contents);
+  const json = JSON.stringify(messageAsString);
+
+  const ciphertext = JSON.parse(json, (key, value) => {
+    return value && value.type === "Buffer" ? Buffer.from(value) : value;
+  });
+
+  let bytes = CryptoJS.AES.decrypt("" + ciphertext, cryptoKey);
+  console.log("========> decrypt: ", bytes);
+  data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+  console.log("data from subscribe function", data);
+
+  returnedMessageFromHedera = data;
+
+  return data;
+  // console.log(`${message.consensusTimestamp.toDate()} Received: ${messageAsString}`);
+}
+
 async function subscribe(topicId) {
   //Create the query
   try {
     new TopicMessageQuery()
       .setTopicId(topicId)
       .setStartTime(0)
-      .subscribe(
-        hederaClient,
-        (error) => {
-          console.log("Message subscriber raised an error", error);
-        },
-        (message) => {
-          let messageAsString = Buffer.from(
-            message.contents,
-            "utf8"
-          ).toString();
-          console.log(
-            `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
-          );
-        }
-      );
-    console.log("you win");
+      .subscribe(hederaClient, returnMessages);
   } catch (error) {
     console.log("ERROR: MirrorConsensusTopicQuery()", error);
-    process.exit(1);
+    //process.exit(1);
   }
-
-  console.log("I'm subscribed");
 }
+//get specific message
 async function publish(topicId, message) {
   // Send one message
+  let ciphertext = CryptoJS.AES.encrypt(
+    JSON.stringify(message),
+    cryptoKey
+  ).toString();
+
   let sendResponse = await new TopicMessageSubmitTransaction({
     topicId: topicId,
-    message: message,
+    message: ciphertext,
   }).execute(hederaClient);
   const getReceipt = await sendResponse.getReceipt(hederaClient);
 
@@ -71,51 +87,52 @@ async function publish(topicId, message) {
   return transactionStatus;
 }
 
-// async function main() {
-//   // Build Hedera testnet and mirror node client
+//add messages
+async function addNewMessage(req, res) {
+  console.log("test");
+  const { message } = req.body;
+  console.log("body ----------> " + message);
 
-//   //Create a new topic
-//   let txResponse = await new TopicCreateTransaction().execute(client);
+  const topicId = await createTopic();
+  console.log(topicId);
+  console.log("topicid ---------->" + topicId);
+  const status = await publish(topicId, message);
+  console.log("status ---------->" + status);
 
-//   //Grab the newly generated topic ID
-//   let receipt = await txResponse.getReceipt(client);
-//   let topicId = receipt.topicId;
-//   console.log(`Your topic ID is: ${topicId}`);
+  res.status(200).json(status);
+}
+//get all messages
+// /api/messages?topicId=2424
+// api/messages/14243
+async function getMessages(req, res) {
+  //const { id } = req.query.topicId
+  console.log("========GET MESSAGES=========");
+  const { id } = req.params;
 
-//   // Wait 5 seconds between consensus topic creation and subscription creation
-//   await new Promise((resolve) => setTimeout(resolve, 5000));
+  const data = await subscribe(id);
 
-//   //Create the query
-//   new TopicMessageQuery()
-//     .setTopicId(topicId)
-//     .subscribe(client, null, (message) => {
-//       let messageAsString = Buffer.from(message.contents, "utf8").toString();
-//       console.log(
-//         `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
-//       );
-//     });
+  console.log(
+    "==== THIS IS THE DATA FROM GETMESSAGES() ====" + JSON.stringify(data)
+  );
 
-//   // Send one message
-//   let sendResponse = await new TopicMessageSubmitTransaction({
-//     topicId: topicId,
-//     message: "Hello, HCS!",
-//   }).execute(client);
-//   const getReceipt = await sendResponse.getReceipt(client);
+  res.status(200).json(returnedMessageFromHedera);
+}
 
-//   //Get the status of the transaction
-//   const transactionStatus = getReceipt.status;
-//   console.log("The message transaction status: " + transactionStatus);
-// }
-// main().catch((err) => console.error(err));
+message = {
+  senderName: "John Smith",
+  receiverName: "Joe Blow",
+  message: "You don't look so good.",
+};
+// const topicId = createTopic();
+// console.log(topicId);
 
-// const newTopic = createTopic();
-// newTopic.then(() => {
-//   console.log(newTopic);
-// });
-// console.log("this is the topic id" + " " + newTopic);
-subscribe("0.0.3381880");
-publish("0.0.3381880", "hello World");
+subscribe("0.0.3382070");
+//publish("0.0.3382026", message);
 
-//publish(subscribe(createTopic()), "hello again");
-
-//module.exports = { createTopic, subscribe, publish };
+module.exports = {
+  createTopic,
+  subscribe,
+  publish,
+  addNewMessage,
+  getMessages,
+};

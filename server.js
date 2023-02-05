@@ -13,7 +13,5 @@ app.use(morgan("dev"));
 app.use("/api/messages", messageRoutes);
 
 app.listen(PORT, () => {
-  console.log(
-    `➡️ Connected to MongoDb 🖥️. Server listening on port ${PORT} 🎧`
-  );
+  console.log(`Server listening on port ${PORT} 🎧`);
 });
