@@ -8,7 +8,7 @@ const {
 const router = express.Router();
 
 // Get all messages
-router.get("/", getMessages);
+router.get("/:id", getMessages);
 
 // POST a message
 router.post("/", addNewMessage);

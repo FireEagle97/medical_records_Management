@@ -35,6 +35,7 @@ async function createTopic() {
 }
 async function subscribe(topicId) {
   //Create the query
+
   try {
     new TopicMessageQuery()
       .setTopicId(topicId)
@@ -49,17 +50,19 @@ async function subscribe(topicId) {
 
         let bytes = CryptoJS.AES.decrypt("" + ciphertext, cryptoKey);
 
-        let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+        data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+        console.log("data from subscribe function", data);
+        return data;
 
-        console.log(
+        //let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+        /*         console.log(
           "Did the crypto-js work? ======>" + JSON.stringify(decryptedData)
         );
-
+ */
         console.log(
           `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
         );
-
-        return decryptedData;
       });
   } catch (error) {
     console.log("ERROR: MirrorConsensusTopicQuery()", error);
@@ -99,8 +102,17 @@ async function addNewMessage(req, res) {
   res.status(200).json(status);
 }
 //get all messages
-function getMessages(res, res) {
-  res.status(200).json({ get: "get" });
+// /api/messages?topicId=2424
+// api/messages/14243
+async function getMessages(req, res) {
+  //const { id } = req.query.topicId
+  const { id } = req.params;
+  console.log(id);
+  const data = await subscribe(id);
+
+  console.log(typeof data, data);
+
+  res.status(200).json(data);
 }
 
 message = {
@@ -111,7 +123,7 @@ message = {
 // const topicId = createTopic();
 // console.log(topicId);
 
-// subscribe("0.0.3382026");
+subscribe("0.0.3382070");
 //publish("0.0.3382026", message);
 
 module.exports = {
