@@ -1,6 +1,4 @@
 const {
-  AccountId,
-  PrivateKey,
   Client,
   TopicCreateTransaction,
   TopicMessageQuery,
@@ -10,6 +8,7 @@ require("dotenv").config({ path: `../.env` });
 
 const myAccountId = process.env.MY_ACCOUNT_ID;
 const myPrivateKey = process.env.MY_PRIVATE_KEY;
+const crypto =
 
 const hederaClient = Client.forTestnet();
 hederaClient.setOperator(myAccountId, myPrivateKey);
@@ -39,39 +38,23 @@ async function subscribe(topicId) {
       .subscribe(
         hederaClient,
         (message) => {
-          // const mirrorMessage = new TextDecoder("utf-8").decode(message.contents);
-          // const messageJson = JSON.parse(mirrorMessage);
-          // console.log(messageJson)
-          
-          // const runningHash = UInt8ToString(message["runningHash"]);
-          // const timestamp = secondsToDate(message["consensusTimestamp"]);
-
-          // const messageToUI = {
-          //     operatorAccount: myAccountId ,
-          //     client: hederaClient,
-          //     message: messageJson,
-          //     sequence: message.sequenceNumber.toString(10), // sequence number is a big integer
-          //     runningHash: runningHash,
-          //     timestamp: timestamp
-          // }
-          // console.log("message ToUO"+messageToUI)
           let messageAsString = Buffer.from(
             message.contents,
             "utf8"
           ).toString();
-          console.log(
-            `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
-          );
+
+          // console.log(
+          //   `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
+          // );
           // console.log("contents " +message.contents)
         }
       );
-    console.log("you win");
   } catch (error) {
     console.log("ERROR: MirrorConsensusTopicQuery()", error);
     process.exit(1);
   }
+  
 
-   return messagesArr
 }
 //get specific message
 async function publish(topicId, message) {
