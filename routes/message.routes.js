@@ -1,12 +1,16 @@
 const express = require("express");
-const app = require("../controllers/message.controller.js");
+const {
+  getMessages,
+  addMessage,
+  addNewMessage,
+} = require("../controllers/message.controller.js");
 
 const router = express.Router();
 
 // Get all messages
-router.get("/", );
+router.get("/:id", getMessages);
 
 // POST a message
-router.post("/", addMessage);
+router.post("/", addNewMessage);
 
 module.exports = router;
