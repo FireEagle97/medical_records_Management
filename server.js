@@ -3,7 +3,7 @@ const express = require("express");
 const morgan = require("morgan");
 const messageRoutes = require("./routes/message.routes");
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 9000;
 
 const app = express();
 

@@ -58,6 +58,8 @@ async function subscribe(topicId) {
         console.log(
           `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
         );
+
+        return decryptedData;
       });
   } catch (error) {
     console.log("ERROR: MirrorConsensusTopicQuery()", error);
@@ -84,10 +86,17 @@ async function publish(topicId, message) {
 }
 
 //add messages
-function addNewMessage(req, res) {
+async function addNewMessage(req, res) {
   const { message } = req.body;
+  console.log("body ----------> " + message);
 
-  res.status(200).json({ post: "post" });
+  const topicId = await createTopic();
+  console.log(topicId);
+  console.log("topicid ---------->" + topicId);
+  const status = await publish(topicId, message);
+  console.log("status ---------->" + status);
+
+  res.status(200).json(status);
 }
 //get all messages
 function getMessages(res, res) {
@@ -102,7 +111,7 @@ message = {
 // const topicId = createTopic();
 // console.log(topicId);
 
-subscribe("0.0.3382026");
+// subscribe("0.0.3382026");
 //publish("0.0.3382026", message);
 
 module.exports = {
