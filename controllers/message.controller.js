@@ -13,7 +13,6 @@ const cryptoKey = "qwert";
 
 const myAccountId = process.env.MY_ACCOUNT_ID;
 const myPrivateKey = process.env.MY_PRIVATE_KEY;
-const crypto =
 
 const hederaClient = Client.forTestnet();
 hederaClient.setOperator(myAccountId, myPrivateKey);
