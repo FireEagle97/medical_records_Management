@@ -1,5 +1,7 @@
 Our Website: https://kazitasin07.wixsite.com/mysite
 
+We used velo by wix to implement the hedera blockchain technology onto the wix website
+
 # medical_records_Management
 
 ## Inspiration
