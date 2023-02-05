@@ -18,7 +18,6 @@ const myPrivateKey = process.env.MY_PRIVATE_KEY;
 
 const hederaClient = Client.forTestnet();
 hederaClient.setOperator(myAccountId, myPrivateKey);
-// console.log("the client " + JSON.stringify(hederaClient))
 
 // return the client
 async function createTopic() {
@@ -43,11 +42,6 @@ async function subscribe(topicId) {
       .subscribe(hederaClient, (message) => {
         let messageAsString = Buffer.from(message.contents);
         const json = JSON.stringify(messageAsString);
-        // console.log("json", json);
-        // const encodedJson = encodeURI(json);
-        // console.log("encoded", encodedJson);
-        // const decodedJson = decodeURI(encodedJson);
-        // console.log("deconded", decodedJson);
 
         const ciphertext = JSON.parse(json, (key, value) => {
           return value && value.type === "Buffer" ? Buffer.from(value) : value;
@@ -90,7 +84,13 @@ async function publish(topicId, message) {
 }
 
 //add messages
+function addMessage(req, res) {
+  res.status(200).json({ post: "post" });
+}
 //get all messages
+function getMessages(res, res) {
+  res.status(200).json({ get: "get" });
+}
 
 message = {
   senderName: "John Smith",
@@ -103,6 +103,4 @@ message = {
 subscribe("0.0.3382026");
 publish("0.0.3382026", message);
 
-//publish(subscribe(createTopic()), "hello again");
-
-module.exports = { createTopic, subscribe, publish };
+module.exports = { createTopic, subscribe, publish, addMessage, getMessages };
