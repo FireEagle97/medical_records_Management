@@ -15,9 +15,10 @@ Our tech stack consisted of Twilio, Python, Hedera, Wix, JavaScript, and React, 
 
 <img src="http://g.recordit.co/bUeotlRuoF.gif" width=500><br>
 
-##System Architect
+## System Architect
 
 <img src="http://g.recordit.co/XMpJ95HRz7.gif" width=500><br>
+## Hedera Blockchain
 
 <img src="http://g.recordit.co/eb3AbFQNnT.gif" width=500><br>
 
