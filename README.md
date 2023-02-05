@@ -4,12 +4,12 @@
 
 Our inspiration for creating a secure platform using blockchain technology came from the need for secure and confidential communication between doctors and patients. In the traditional system, there was always a fear of data breaches and privacy violations. With the help of blockchain technology, we aimed to provide a platform where the users, both doctors and patients, could communicate with each other securely. 
 
-## What it does
+##What it does
 
 Our platform ensures authentication using public and private keys for each user, providing a secure and encrypted way of sending and receiving messages through Hedera. Our front end features a login section, a messaging section where users can see their messages, and an admin/doctor section where they can send messages and see messages that have been sent. Our platform also keeps a secure track of user data by saving it in the network transactions, providing a secure and tamper-proof environment for the users.
 
 
-## How we built it
+##How we built it
 
 Our tech stack consisted of Twilio, Python, Hedera, Wix, JavaScript, and React, which provided us with the necessary tools to build a robust and secure platform. The platform was designed with a focus on user experience, starting with the authentication process, where each user was given a unique public and private key for secure sign-in. The messaging system was built using the Hedra protocol, ensuring secure and encrypted communication between the users. The front end was designed with a login section, a messaging section where users can see their messages, and an admin/doctor section where they can send messages and see messages that have been sent. To ensure the security and privacy of user data, we saved it in the network transactions and implemented a secure way of tracking it. Overall, the platform was built with the highest standards of security and privacy in mind, providing a secure environment for our users to communicate with confidence.
 
@@ -22,11 +22,11 @@ Our tech stack consisted of Twilio, Python, Hedera, Wix, JavaScript, and React, 
 <img src="http://g.recordit.co/eb3AbFQNnT.gif" width=500><br>
 
 
-## Challenges we ran into
+##Challenges we ran into
 
 In building the secure platform, we encountered several challenges along the way. One of the biggest challenges was ensuring the secure and encrypted transmission of messages between the users. The implementation of the Hedra protocol was a complex process, and we had to put in a lot of effort to ensure that the messages were transmitted securely.  Additionally, the secure storage and tracking of user data presented a challenge, as we had to ensure that the data was stored securely and could be easily retrieved when needed. Despite these challenges, we were able to overcome them and build a platform that meets our goal of providing a secure and private way for users to communicate with their doctors.
 
-## Accomplishments that we're proud of
+##Accomplishments that we're proud of
 
 We are proud of several accomplishments that have been achieved with the development of the platform. Firstly, we are proud of our successful implementation of blockchain technology to provide a secure platform for users to communicate with their doctors. This is a significant accomplishment as it demonstrates our ability to harness cutting-edge technology to solve real-world problems. . This accomplishment showcases our technical expertise and ability to bring together various components to build a comprehensive solution. Finally, we are proud of the secure storage and tracking of user data, which is a crucial aspect of the platform and demonstrates our commitment to data privacy and security. Overall, these accomplishments are a testament to our dedication and expertise in providing secure and innovative solutions.
 
