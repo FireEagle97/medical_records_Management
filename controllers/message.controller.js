@@ -1,4 +1,6 @@
 const {
+  AccountId,
+  PrivateKey,
   Client,
   TopicCreateTransaction,
   TopicMessageQuery,
@@ -88,6 +90,7 @@ async function publish(topicId, message) {
 
 //add messages
 async function addNewMessage(req, res) {
+  console.log("test");
   const { message } = req.body;
   console.log("body ----------> " + message);
 
