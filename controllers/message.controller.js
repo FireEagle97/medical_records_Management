@@ -10,6 +10,7 @@ const {
 require("dotenv").config({ path: `../.env` });
 
 const CryptoJS = require("crypto-js");
+const { text } = require("express");
 
 const cryptoKey = "qwert";
 
@@ -33,40 +34,38 @@ async function createTopic() {
     process.exit(1);
   }
 }
+
+let returnedMessageFromHedera = "";
+
+function returnMessages(message) {
+  let messageAsString = Buffer.from(message.contents);
+  const json = JSON.stringify(messageAsString);
+
+  const ciphertext = JSON.parse(json, (key, value) => {
+    return value && value.type === "Buffer" ? Buffer.from(value) : value;
+  });
+
+  let bytes = CryptoJS.AES.decrypt("" + ciphertext, cryptoKey);
+  console.log("========> decrypt: ", bytes);
+  data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+  console.log("data from subscribe function", data);
+
+  returnedMessageFromHedera = data;
+
+  return data;
+  // console.log(`${message.consensusTimestamp.toDate()} Received: ${messageAsString}`);
+}
+
 async function subscribe(topicId) {
   //Create the query
-
   try {
     new TopicMessageQuery()
       .setTopicId(topicId)
       .setStartTime(0)
-      .subscribe(hederaClient, (message) => {
-        let messageAsString = Buffer.from(message.contents);
-        const json = JSON.stringify(messageAsString);
-
-        const ciphertext = JSON.parse(json, (key, value) => {
-          return value && value.type === "Buffer" ? Buffer.from(value) : value;
-        });
-
-        let bytes = CryptoJS.AES.decrypt("" + ciphertext, cryptoKey);
-
-        data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-        console.log("data from subscribe function", data);
-        return data;
-
-        //let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-
-        /*         console.log(
-          "Did the crypto-js work? ======>" + JSON.stringify(decryptedData)
-        );
- */
-        console.log(
-          `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
-        );
-      });
+      .subscribe(hederaClient, returnMessages);
   } catch (error) {
     console.log("ERROR: MirrorConsensusTopicQuery()", error);
-    process.exit(1);
+    //process.exit(1);
   }
 }
 //get specific message
@@ -107,13 +106,16 @@ async function addNewMessage(req, res) {
 // api/messages/14243
 async function getMessages(req, res) {
   //const { id } = req.query.topicId
+  console.log("========GET MESSAGES=========");
   const { id } = req.params;
-  console.log(id);
+
   const data = await subscribe(id);
 
-  console.log(typeof data, data);
+  console.log(
+    "==== THIS IS THE DATA FROM GETMESSAGES() ====" + JSON.stringify(data)
+  );
 
-  res.status(200).json(data);
+  res.status(200).json(returnedMessageFromHedera);
 }
 
 message = {
