@@ -43,20 +43,23 @@ async function subscribe(topicId) {
       .subscribe(hederaClient, (message) => {
         let messageAsString = Buffer.from(message.contents);
         const json = JSON.stringify(messageAsString);
+        // console.log("json", json);
+        // const encodedJson = encodeURI(json);
+        // console.log("encoded", encodedJson);
+        // const decodedJson = decodeURI(encodedJson);
+        // console.log("deconded", decodedJson);
 
-        const unbuffered = JSON.parse(json, (key, value) => {
+        const ciphertext = JSON.parse(json, (key, value) => {
           return value && value.type === "Buffer" ? Buffer.from(value) : value;
         });
 
-        console.log("unbuffered =====>" + unbuffered);
+        let bytes = CryptoJS.AES.decrypt("" + ciphertext, cryptoKey);
 
-        /*         let bytes = CryptoJS.AES.decrypt(ciphertext, cryptoKey);
-        console.log(bytes);
         let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
         console.log(
           "Did the crypto-js work? ======>" + JSON.stringify(decryptedData)
-        ); */
+        );
 
         console.log(
           `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
@@ -97,8 +100,8 @@ message = {
 // const topicId = createTopic();
 // console.log(topicId);
 
-subscribe("0.0.3382024");
-//publish("0.0.3382024", message);
+subscribe("0.0.3382026");
+publish("0.0.3382026", message);
 
 //publish(subscribe(createTopic()), "hello again");
 
