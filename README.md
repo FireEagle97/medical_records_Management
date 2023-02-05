@@ -13,14 +13,14 @@ Our platform ensures authentication using public and private keys for each user,
 
 Our tech stack consisted of Twilio, Python, Hedera, Wix, JavaScript, and React, which provided us with the necessary tools to build a robust and secure platform. The platform was designed with a focus on user experience, starting with the authentication process, where each user was given a unique public and private key for secure sign-in. The messaging system was built using the Hedra protocol, ensuring secure and encrypted communication between the users. The front end was designed with a login section, a messaging section where users can see their messages, and an admin/doctor section where they can send messages and see messages that have been sent. To ensure the security and privacy of user data, we saved it in the network transactions and implemented a secure way of tracking it. Overall, the platform was built with the highest standards of security and privacy in mind, providing a secure environment for our users to communicate with confidence.
 
-<img src="http://g.recordit.co/bUeotlRuoF.gif" width=100><br>
+<img src="http://g.recordit.co/bUeotlRuoF.gif" width=500><br>
 
 ##System Architect
 
-<img src="http://g.recordit.co/XMpJ95HRz7.gif" width=100><br>
+<img src="http://g.recordit.co/XMpJ95HRz7.gif" width=500><br>
 
 ##Hedera Blockchain
-<img src="http://g.recordit.co/eb3AbFQNnT.gif" width=100><br>
+<img src="http://g.recordit.co/eb3AbFQNnT.gif" width=500><br>
 
 
 ## Challenges we ran into
