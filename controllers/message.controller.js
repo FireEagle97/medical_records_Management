@@ -36,61 +36,48 @@ async function createTopic() {
 }
 async function subscribe(topicId) {
   //Create the query
-  const messagesArr = [];
   try {
     new TopicMessageQuery()
       .setTopicId(topicId)
       .setStartTime(0)
       .subscribe(hederaClient, (message) => {
-        // const mirrorMessage = new TextDecoder("utf-8").decode(message.contents);
-        // const messageJson = JSON.parse(mirrorMessage);
-        // console.log(messageJson)
-
-        // const runningHash = UInt8ToString(message["runningHash"]);
-        // const timestamp = secondsToDate(message["consensusTimestamp"]);
-
-        // const messageToUI = {
-        //     operatorAccount: myAccountId ,
-        //     client: hederaClient,
-        //     message: messageJson,
-        //     sequence: message.sequenceNumber.toString(10), // sequence number is a big integer
-        //     runningHash: runningHash,
-        //     timestamp: timestamp
-        // }
-        // console.log("message ToUO"+messageToUI)
-
         let messageAsString = Buffer.from(message.contents);
         const json = JSON.stringify(messageAsString);
 
-        const copy = JSON.parse(json, (key, value) => {
+        const unbuffered = JSON.parse(json, (key, value) => {
           return value && value.type === "Buffer" ? Buffer.from(value) : value;
         });
 
-        console.log("======> " + copy);
+        console.log("unbuffered =====>" + unbuffered);
+
+        /*         let bytes = CryptoJS.AES.decrypt(ciphertext, cryptoKey);
+        console.log(bytes);
+        let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+        console.log(
+          "Did the crypto-js work? ======>" + JSON.stringify(decryptedData)
+        ); */
 
         console.log(
           `${message.consensusTimestamp.toDate()} Received: ${messageAsString}`
         );
-        // console.log("contents " +message.contents)
       });
-    console.log("you win");
   } catch (error) {
     console.log("ERROR: MirrorConsensusTopicQuery()", error);
     process.exit(1);
   }
-
-  return messagesArr;
 }
 //get specific message
 async function publish(topicId, message) {
   // Send one message
-  let encrypted = CryptoJS.AES.encrypt(JSON.stringify(message), cryptoKey);
-  encrypted = encrypted.toString();
-  console.log(encrypted);
+  let ciphertext = CryptoJS.AES.encrypt(
+    JSON.stringify(message),
+    cryptoKey
+  ).toString();
 
   let sendResponse = await new TopicMessageSubmitTransaction({
     topicId: topicId,
-    message: encrypted,
+    message: ciphertext,
   }).execute(hederaClient);
   const getReceipt = await sendResponse.getReceipt(hederaClient);
 
@@ -107,9 +94,11 @@ message = {
   receiverName: "Joe Blow",
   message: "You don't look so good.",
 };
+// const topicId = createTopic();
+// console.log(topicId);
 
-subscribe("0.0.3381880");
-//publish("0.0.3381880", message);
+subscribe("0.0.3382024");
+//publish("0.0.3382024", message);
 
 //publish(subscribe(createTopic()), "hello again");
 
